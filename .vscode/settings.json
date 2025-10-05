@@ -2,5 +2,6 @@
     "yaml.schemas": {
         "file:///c%3A/Users/giova/.vscode/extensions/atlassian.atlascode-3.8.10/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml",
         "https://www.schemastore.org/pubspec.json": "file:///c%3A/Users/giova/OneDrive/Documentos/GitHub/CamaraDeputados/camara_dos_deputados/pubspec.yaml"
-    }
+    },
+    "cmake.sourceDirectory": "C:/Users/giova/OneDrive/Documentos/GitHub/CamaraDeputados/camara_dos_deputados/windows/flutter"
 }
