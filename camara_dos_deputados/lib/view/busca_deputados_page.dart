@@ -70,8 +70,15 @@ class _BuscaDeputadosPageState extends State<BuscaDeputadosPage> {
     } catch (e) {
       setState(() {
         Container(
-          //vai mostrar o erro que veio (e.toString)
-          
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 50, 60, 65),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            'Erro: ${e.toString()}',
+            style: const TextStyle(color: Colors.redAccent, fontSize: 16),
+          ),
         );
       });
     }
@@ -104,7 +111,15 @@ class _BuscaDeputadosPageState extends State<BuscaDeputadosPage> {
     } catch (e) {
       setState(() {
         Container(
-          //vai mostrar o erro que veio (e.toString)
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 50, 60, 65),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            'Erro: ${e.toString()}',
+            style: const TextStyle(color: Colors.redAccent, fontSize: 16),
+          ),
         );
         _carregandoMais = false;
       });
@@ -112,32 +127,29 @@ class _BuscaDeputadosPageState extends State<BuscaDeputadosPage> {
   }
 
   Future<void> _buscaDetlhes(int id, bool expandido) async {
-    if (expandido) {
-      setState(() {
-        _idDeputado = null; // fecha o card de detalhes
-      });
-      return;
-    }
-
     setState(() {
       carregandoDetalhes = true;
-      _idDeputado = id;
-      _deputadosDetalhes = null;
       _despesas = null;
     });
 
     try {
-      final detalhes = await _camaraDosDeputadosService.getDeputadoDetalhes(id);
       final despesas = await _camaraDosDeputadosService.getDespesas(id);
 
       setState(() {
-        _deputadosDetalhes = detalhes;
         _despesas = despesas;
       });
     } catch (e) {
       setState(() {
         Container(
-          //vai mostrar o erro que veio (e.toString)
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 50, 60, 65),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            'Erro: ${e.toString()}',
+            style: const TextStyle(color: Colors.redAccent, fontSize: 16),
+          ),
         );
       });
     }
@@ -219,9 +231,7 @@ class _BuscaDeputadosPageState extends State<BuscaDeputadosPage> {
                         subtitle: Text(
                           "${deputado["siglaPartido"]} - ${deputado["siglaUf"]}",
                         ),
-                        children: <Widget>[
-                          _buildDetalhesDeputado(),
-                        ],
+                        children: <Widget>[_exibeDetalhesDeputado()],
                       ),
                     );
                   },
@@ -233,9 +243,8 @@ class _BuscaDeputadosPageState extends State<BuscaDeputadosPage> {
     );
   }
 
-  Widget _buildDetalhesDeputado() {
-
-    if (_deputados == null) {
+  Widget _exibeDetalhesDeputado() {
+    if (_deputados.isEmpty) {
       return Padding(
         padding: const EdgeInsets.all(16.0),
         child: Text("Não foi possível carregar os detalhes."),
@@ -243,16 +252,19 @@ class _BuscaDeputadosPageState extends State<BuscaDeputadosPage> {
     }
 
     final despesaMaisRecente = _despesas != null && _despesas!.isNotEmpty
-        ? _despesas!.first // se as despesas não forem vazias pega a primeira
+        ? _despesas!
+              .first // se as despesas não forem vazias pega a primeira
         : null;
     final totalDespesasRecentes =
-        _despesas?.fold<double>( // fold faz a soma de um campo especifico
+        _despesas?.fold<double>(
+          // fold faz a soma de um campo especifico
           0.0,
           (sum, item) => sum + (item['valorLiquido'] as num).toDouble(),
         ) ??
         0.0;
 
-    final currencyFormatter = NumberFormat.currency( // formata o valor para real
+    final currencyFormatter = NumberFormat.currency(
+      // formata o valor para real
       locale: 'pt_BR',
       symbol: 'R\$',
     );
@@ -268,8 +280,8 @@ class _BuscaDeputadosPageState extends State<BuscaDeputadosPage> {
           ),
           SizedBox(height: 12),
           Text(
-            "Soma dos últimos lançamentos:",
-            style: TextStyle(color: const Color.fromARGB(255, 101, 100, 100)),
+            "Soma de despesas:",
+            style: TextStyle(color: Color.fromARGB(255, 148, 143, 143)),
           ),
           Text(
             currencyFormatter.format(totalDespesasRecentes),
@@ -278,7 +290,7 @@ class _BuscaDeputadosPageState extends State<BuscaDeputadosPage> {
           Divider(height: 24, thickness: 1), // é um linha
           Text(
             "Gasto mais recente:",
-            style: TextStyle(color: const Color.fromARGB(255, 101, 100, 100)),
+            style: TextStyle(color: Color.fromARGB(255, 148, 143, 143)),
           ),
           if (despesaMaisRecente != null)
             ListTile(
