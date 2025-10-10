@@ -239,7 +239,6 @@ class _BuscaDeputadosPageState extends State<BuscaDeputadosPage> {
             else
               Expanded(
                 child: ListView.builder(
-                  // perguntar se ta certo
                   controller: _scrollController,
                   itemCount: _deputados.length + (_temMais ? 1 : 0),
                   itemBuilder: (context, index) {
